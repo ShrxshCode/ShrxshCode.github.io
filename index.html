@@ -1,0 +1,618 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Shrish Sharma, Computer Science student at UT Knoxville building ML, agentic RAG and backend systems.">
+<title>Shrish Sharma Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@500;700;800&family=IBM+Plex+Sans:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one narrow column read like a repo; each section is a "file" with a mono path label, experience runs on a commit-style timeline. */
+:root {
+  --bg: #0d1117;
+  --bg-raise: #141b24;
+  --line: #243041;
+  --fg: #dfe6ee;
+  --muted: #8b98a8;
+  --accent: #6cc4ff;
+  --warm: #f2b46b;
+  --ok: #7ee2a8;
+  --f-display: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --f-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) {
+  --bg: #f5f7fa; --bg-raise: #ffffff; --line: #d8dfe8; --fg: #16202c; --muted: #5a6778;
+  --accent: #0b6fb8; --warm: #a65d0c; --ok: #1d7a49; color-scheme: light;
+} }
+:root[data-theme="light"] {
+  --bg: #f5f7fa; --bg-raise: #ffffff; --line: #d8dfe8; --fg: #16202c; --muted: #5a6778;
+  --accent: #0b6fb8; --warm: #a65d0c; --ok: #1d7a49; color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; background: var(--bg); color: var(--fg);
+  font-family: var(--f-body); font-size: 16px; line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+
+.progress { position: fixed; top: 0; left: 0; height: 2px; width: 100%; background: var(--accent);
+  transform-origin: 0 50%; transform: scaleX(0); z-index: 20; }
+
+nav.top {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10;
+  background: color-mix(in srgb, var(--bg) 86%, transparent);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--line);
+}
+.nav-inner { max-width: 880px; margin: 0 auto; padding: 12px 20px; display: flex; align-items: center; gap: 20px;
+  font-family: var(--f-mono); font-size: 13px; }
+.nav-inner .home { color: var(--fg); font-weight: 500; margin-right: auto; }
+.nav-inner .home span { color: var(--accent); }
+.nav-links { display: flex; gap: 18px; flex-wrap: wrap; }
+.nav-links a { color: var(--muted); }
+.nav-links a.on, .nav-links a:hover { color: var(--fg); text-decoration: none; }
+
+main { max-width: 880px; margin: 0 auto; padding: 0 20px 80px; }
+section { padding-block: 72px 8px; scroll-margin-top: 56px; }
+
+/* hero */
+.hero { padding-block: 72px 24px; }
+.prompt { font-family: var(--f-mono); font-size: 14px; color: var(--muted); }
+.prompt b { color: var(--ok); font-weight: 500; }
+.caret { display: inline-block; width: 8px; height: 1.05em; background: var(--accent); vertical-align: -2px; margin-left: 2px;
+  animation: blink 1.1s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+h1 { font-family: var(--f-display); font-weight: 800; font-size: clamp(44px, 9vw, 84px); line-height: 0.98;
+  letter-spacing: -0.03em; margin: 18px 0 18px; text-wrap: balance; }
+.lede { font-size: clamp(17px, 2.2vw, 20px); color: var(--muted); max-width: 58ch; margin: 0; }
+.lede strong { color: var(--fg); font-weight: 500; }
+.hero-meta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
+.chip { font-family: var(--f-mono); font-size: 12.5px; border: 1px solid var(--line); padding: 6px 10px; border-radius: 6px;
+  color: var(--fg); background: var(--bg-raise); display: inline-flex; align-items: center; gap: 8px; }
+.chip .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ok) 25%, transparent); }
+button.chip { cursor: pointer; font: inherit; font-family: var(--f-mono); font-size: 12.5px; }
+button.chip:hover { border-color: var(--accent); }
+
+/* section headers */
+.path { font-family: var(--f-mono); font-size: 13px; color: var(--muted); letter-spacing: 0.02em; }
+.path span { color: var(--accent); }
+h2 { font-family: var(--f-display); font-weight: 700; font-size: clamp(28px, 4.5vw, 38px); letter-spacing: -0.02em;
+  margin: 6px 0 28px; text-wrap: balance; }
+
+/* experience timeline */
+.timeline { position: relative; display: grid; gap: 40px; padding-left: 28px; }
+.timeline::before { content: ""; position: absolute; left: 5px; top: 8px; bottom: 8px; width: 2px; background: var(--line); }
+.timeline .fill { position: absolute; left: 5px; top: 8px; width: 2px; height: 0; background: var(--accent); transition: height .15s linear; }
+.job { position: relative; min-width: 0; }
+.job::before { content: ""; position: absolute; left: -28px; top: 7px; width: 12px; height: 12px; border-radius: 50%;
+  background: var(--bg); border: 2px solid var(--accent); }
+.job-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 16px; align-items: baseline; }
+.job h3 { font-family: var(--f-display); font-weight: 700; font-size: 21px; margin: 0; letter-spacing: -0.01em; }
+.job .role { color: var(--muted); margin: 2px 0 0; font-size: 15px; }
+.when { font-family: var(--f-mono); font-size: 12.5px; color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.job ul { margin: 14px 0 0; padding: 0; list-style: none; display: grid; gap: 8px; max-width: 70ch; }
+.job li { position: relative; padding-left: 18px; color: var(--fg); font-size: 15.5px; }
+.job li::before { content: "›"; position: absolute; left: 0; color: var(--accent); font-family: var(--f-mono); }
+
+.metrics { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+.metric { font-family: var(--f-mono); font-size: 12.5px; padding: 6px 10px; border-radius: 6px;
+  border: 1px solid var(--line); color: var(--muted); font-variant-numeric: tabular-nums; }
+.metric b { color: var(--warm); font-weight: 500; }
+
+/* projects */
+.projects { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr)); gap: 18px; }
+.proj { background: var(--bg-raise); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; min-width: 0;
+  display: flex; flex-direction: column; transition: border-color .2s, transform .2s; }
+.proj:hover { border-color: var(--accent); transform: translateY(-2px); }
+.proj-bar { display: flex; align-items: center; gap: 6px; padding: 10px 14px; border-bottom: 1px solid var(--line);
+  font-family: var(--f-mono); font-size: 12px; color: var(--muted); }
+.proj-bar i { width: 9px; height: 9px; border-radius: 50%; background: var(--line); }
+.proj-bar em { font-style: normal; margin-left: 8px; }
+.proj-body { padding: 18px 18px 20px; display: flex; flex-direction: column; gap: 12px; flex: 1; }
+.proj h3 { font-family: var(--f-display); font-size: 20px; margin: 0; letter-spacing: -0.01em; }
+.proj .status { font-family: var(--f-mono); font-size: 12px; color: var(--ok); }
+.proj ul { margin: 0; padding-left: 18px; display: grid; gap: 6px; font-size: 14.5px; color: var(--muted); }
+.proj.wide { grid-column: 1 / -1; }
+.proj-lede { margin: 0; max-width: 70ch; }
+.proj .metrics { margin-top: 0; }
+.stack { display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto; padding-top: 6px; }
+.tag { font-family: var(--f-mono); font-size: 11.5px; padding: 3px 8px; border-radius: 4px;
+  background: color-mix(in srgb, var(--accent) 12%, transparent); color: var(--accent); }
+
+/* systems */
+.sec-lede { margin: -14px 0 28px; color: var(--muted); max-width: 62ch; }
+.sys-list { display: grid; gap: 22px; }
+.sys { border: 1px solid var(--line); border-radius: 10px; padding: 22px 22px 20px; min-width: 0; display: grid; gap: 12px; }
+.sys-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 16px; align-items: baseline; }
+.sys h3 { font-family: var(--f-display); font-size: 20px; margin: 0; letter-spacing: -0.01em; }
+.sys .file { display: block; font-family: var(--f-mono); font-size: 12.5px; font-weight: 400; color: var(--accent); letter-spacing: 0; margin-bottom: 2px; }
+.sys p { margin: 0; max-width: 70ch; }
+.sys ul { margin: 0; padding-left: 18px; display: grid; gap: 6px; font-size: 14.5px; color: var(--muted); max-width: 70ch; }
+.sys code { font-family: var(--f-mono); font-size: 0.92em; }
+.snip { margin: 4px 0 0; background: var(--bg-raise); border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px;
+  overflow-x: auto; font-size: 12.5px; line-height: 1.7; }
+.snip code { font-size: 1em; color: var(--fg); }
+.snip .c { color: var(--muted); }
+.sys .stack { margin-top: 2px; padding-top: 0; }
+
+/* skills */
+.code { background: var(--bg-raise); border: 1px solid var(--line); border-radius: 10px; padding: 20px 22px;
+  font-family: var(--f-mono); font-size: 13.5px; line-height: 1.9; overflow-x: auto; }
+.code .k { color: var(--accent); }
+.code .s { color: var(--warm); }
+.code .p { color: var(--muted); }
+.code .row { white-space: nowrap; }
+.code .row .vals { white-space: normal; }
+@media (min-width: 640px) { .code .row { white-space: normal; padding-left: 2ch; text-indent: -2ch; } }
+
+/* education */
+.edu { display: grid; grid-template-columns: 1fr auto; gap: 4px 20px; align-items: baseline; }
+.edu h3 { font-family: var(--f-display); font-size: 21px; margin: 0; }
+.edu p { margin: 0; color: var(--muted); }
+.course-label { font-family: var(--f-mono); font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin: 26px 0 10px; }
+.courses { display: flex; flex-wrap: wrap; gap: 8px; }
+.courses span { border: 1px solid var(--line); border-radius: 6px; padding: 5px 10px; font-size: 14px; }
+.ta { margin-top: 26px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 16px; border-top: 1px solid var(--line); padding-top: 18px; }
+.ta b { font-weight: 500; }
+
+/* contact */
+.contact { border: 1px solid var(--line); border-radius: 12px; padding: 32px 28px; background: var(--bg-raise); }
+.contact p { margin: 0 0 20px; color: var(--muted); max-width: 52ch; }
+.contact-row { display: flex; flex-wrap: wrap; gap: 12px; }
+footer { max-width: 880px; margin: 0 auto; padding: 24px 20px 40px; font-family: var(--f-mono); font-size: 12px; color: var(--muted); }
+
+/* reveal: only applied by JS to elements below the fold, so the page is complete at rest */
+.reveal { opacity: 0; transform: translateY(22px); }
+.reveal.in { opacity: 1; transform: none; transition: opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1); transition-delay: var(--d, 0s); }
+
+@media (max-width: 560px) {
+  .nav-links { display: none; }
+  .edu { grid-template-columns: 1fr; }
+  section { padding-block: 56px 8px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .caret { animation: none; }
+  .reveal { opacity: 1; transform: none; }
+  .proj:hover { transform: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="progress" id="progress"></div>
+
+<nav class="top">
+  <div class="nav-inner">
+    <a class="home" href="#top">~/shrish<span>_</span></a>
+    <div class="nav-links">
+      <a href="#experience">experience</a>
+      <a href="#projects">projects</a>
+      <a href="#systems">c</a>
+      <a href="#algorithms">c++</a>
+      <a href="#skills">skills</a>
+      <a href="#education">education</a>
+      <a href="#contact">contact</a>
+    </div>
+  </div>
+</nav>
+
+<main id="top">
+  <header class="hero">
+    <div class="prompt"><b>shrish@utk</b>:~$ <span id="typed">whoami</span><span class="caret"></span></div>
+    <h1>Shrish Sharma</h1>
+    <p class="lede">Computer Science student at <strong>UT Knoxville</strong> with a machine learning concentration. I build <strong>agentic RAG pipelines</strong>, <strong>forecasting models</strong> and the <strong>backend systems</strong> that make them fast.</p>
+    <div class="hero-meta">
+      <span class="chip"><span class="dot"></span>Previously SWE intern @ Siemens Healthineers</span>
+      <span class="chip">B.S. CS · May 2028</span>
+      <a class="chip" href="https://linkedin.com/in/shrish-sharmaa" target="_blank" rel="noopener">linkedin ↗</a>
+    </div>
+  </header>
+
+  <section id="experience">
+    <div class="path"><span>./</span>experience.log</div>
+    <h2>Where I've shipped</h2>
+    <div class="timeline" id="timeline">
+      <div class="fill" id="tl-fill"></div>
+
+      <article class="job">
+        <div class="job-head">
+          <h3>Siemens Healthineers</h3>
+          <span class="when">Jan 2026 – Aug 2026</span>
+        </div>
+        <p class="role">Software Engineer Intern · Knoxville, TN</p>
+        <div class="metrics">
+          <span class="metric">lookup latency <b>60s → 5s</b></span>
+          <span class="metric">triage <b>2 days → 10 min</b></span>
+          <span class="metric"><b>5,000+</b> scanners</span>
+        </div>
+        <ul>
+          <li>Replaced slow UI-driven scanner lookups with direct REST/PostgreSQL backend access, cutting latency 85% across 5,000+ scanners.</li>
+          <li>Shipped an agentic RAG pipeline (Ollama) that parses failure traces and runs self-correcting fixes, cutting triage time from 2 days to 10 minutes.</li>
+          <li>Built C#/C++ and Ranorex test suites covering UI and data-integrity workflows, surfacing safety-critical regressions.</li>
+          <li>Developed and executed UI functional test cases, raising and triaging defects while debugging hardware and MARS low-level system issues.</li>
+          <li>Integrated self-correcting test fixes into a CI/CD pipeline, automating failure diagnosis to catch regressions before every release.</li>
+        </ul>
+      </article>
+
+      <article class="job">
+        <div class="job-head">
+          <h3>Hack4Impact · Transit Analytics Platform</h3>
+          <span class="when">Sep 2025 – May 2026</span>
+        </div>
+        <p class="role">Technical Product Manager</p>
+        <div class="metrics">
+          <span class="metric"><b>2.5M+</b> annual riders</span>
+          <span class="metric">lookups <b>10+ min → sub-second</b></span>
+          <span class="metric">queries <b>60%</b> faster</span>
+        </div>
+        <ul>
+          <li>Led the rebuild of a NextAuth-gated Next.js/PostgreSQL analytics platform serving 6 departments.</li>
+          <li>Replaced manual Excel lookups with SQL-backed queryable filters spanning every department's data.</li>
+          <li>Shipped a self-serve analytics dashboard giving departments real-time ridership visibility.</li>
+          <li>Optimized query performance via indexed schema design, complex joins and aggregations, and Docker containerization.</li>
+          <li>Led weekly SCRUM standups, writing user stories and coordinating sprint planning across the engineering team.</li>
+        </ul>
+      </article>
+
+      <article class="job">
+        <div class="job-head">
+          <h3>REConnect Energy</h3>
+          <span class="when">May 2025 – Aug 2025</span>
+        </div>
+        <p class="role">Machine Learning Engineer Intern</p>
+        <div class="metrics">
+          <span class="metric">R² <b>0.831</b></span>
+          <span class="metric">MAPE <b>3.3%</b></span>
+          <span class="metric">features <b>392 → 805</b></span>
+        </div>
+        <ul>
+          <li>Engineered 413 features from 1M+ rows of energy market data to capture temporal patterns and combat drift.</li>
+          <li>Benchmarked XGBoost, LightGBM and Random Forest demand forecasting models, an 18% lift over baseline.</li>
+          <li>Deployed models to AWS/GCP with scheduled retraining and drift-monitoring pipelines, cutting forecast latency 40%.</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section id="projects">
+    <div class="path"><span>./</span>projects/</div>
+    <h2>What I'm building</h2>
+    <div class="projects">
+      <article class="proj wide">
+        <div class="proj-bar"><i></i><i></i><i></i><em>xG</em></div>
+        <div class="proj-body">
+          <span class="status">● shipped · Oct 2026 · <a href="https://github.com/ShrxshCode/xG" target="_blank" rel="noopener">github ↗</a></span>
+          <h3>xG: Expected Goals Model</h3>
+          <p class="proj-lede">Predicts the chance a football shot becomes a goal from where it is taken and where the goalkeeper stands. Trained on StatsBomb open data, with a clickable pitch to explore the model.</p>
+          <div class="metrics">
+            <span class="metric"><b>44,832</b> shots · <b>1,815</b> matches</span>
+            <span class="metric">XGBoost AUC <b>0.801</b></span>
+            <span class="metric">StatsBomb's xG <b>0.814</b></span>
+            <span class="metric">predicted <b>854</b> vs real <b>921</b> goals</span>
+          </div>
+          <ul>
+            <li>Pulls every non-penalty shot from five leagues, two World Cups and two Euros, including the keeper's position from each shot's freeze frame.</li>
+            <li>Engineers geometric features: distance to goal, the angle the goal covers (law of cosines on the posts), and how far the keeper sits off the shooter's line to goal.</li>
+            <li>Compares logistic regression with and without keeper features against XGBoost on a split held out by match. Keeper position adds about 0.015 AUC, and the models are close to calibrated.</li>
+            <li>Precomputes XGBoost predictions across the pitch into a static web app, fading spots with few real shots behind them.</li>
+          </ul>
+          <div class="stack"><span class="tag">Python</span><span class="tag">XGBoost</span><span class="tag">scikit-learn</span><span class="tag">pandas</span><span class="tag">matplotlib</span><span class="tag">StatsBomb data</span><span class="tag">HTML/JS</span></div>
+        </div>
+      </article>
+      <article class="proj">
+        <div class="proj-bar"><i></i><i></i><i></i><em>agentic-rag-platform</em></div>
+        <div class="proj-body">
+          <span class="status">● in progress · Oct 2026</span>
+          <h3>Agentic RAG Knowledge Platform</h3>
+          <ul>
+            <li>Topic-agnostic RAG that ingests any document collection and answers with hybrid search and a reranker, citing the exact source passage.</li>
+            <li>Reusable evaluation harness scoring retrieval hit rate, faithfulness and refusal behavior per corpus.</li>
+            <li>Tests chunk size, reranking and a similarity-threshold fallback one change at a time against a measured baseline.</li>
+            <li>FastAPI service in Docker for AWS, with GitHub Actions rerunning the evaluation on every commit.</li>
+          </ul>
+          <div class="stack"><span class="tag">Python</span><span class="tag">FastAPI</span><span class="tag">Qdrant</span><span class="tag">Claude API</span><span class="tag">Docker</span><span class="tag">AWS</span></div>
+        </div>
+      </article>
+      <article class="proj">
+        <div class="proj-bar"><i></i><i></i><i></i><em>application-insights</em></div>
+        <div class="proj-body">
+          <span class="status">● in progress · Sep 2026</span>
+          <h3>Application Insights Tracker</h3>
+          <ul>
+            <li>Agentic email-parsing pipeline that classifies inbox activity into Rejection, OA, Interview and Offer across 50 to 300+ applications.</li>
+            <li>Read-only, OAuth-gated Gmail connector that seeds records from a 90-day history with zero manual entry.</li>
+            <li>Auto-updating data model that replaces spreadsheet upkeep with automated status-transition tracking.</li>
+          </ul>
+          <div class="stack"><span class="tag">Python</span><span class="tag">Gmail API</span><span class="tag">LLM classification</span><span class="tag">PostgreSQL</span><span class="tag">Next.js</span></div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="systems">
+    <div class="path"><span>./</span>systems/*.c</div>
+    <h2>Systems programming in C</h2>
+    <p class="sec-lede">Coursework from CS360 Systems Programming at UT Knoxville, Fall 2026. Each one is a single C program built on raw file I/O, pointers and hand-managed memory.</p>
+    <div class="sys-list">
+
+      <article class="sys">
+        <div class="sys-head">
+          <h3><span class="file">huff_dec.c</span> Huffman Decoder</h3>
+          <span class="when">Aug 2026</span>
+        </div>
+        <p>Decompresses a Huffman-encoded file. It reads a code file of symbol and bit-string pairs and builds a binary decoding tree from them. It then streams the compressed file one bit at a time, walking left on 0 and right on 1, and prints a symbol each time it reaches a leaf.</p>
+        <ul>
+          <li>Reads the total bit count from the last 4 bytes of the file as a little-endian integer, then checks that the file size matches it exactly.</li>
+          <li>Unpacks bits least-significant first and stops at the exact bit count, so padding in the final byte is never decoded.</li>
+          <li>Rejects malformed input: a bad code file, bits that match no code, or a stream that ends partway down the tree.</li>
+        </ul>
+        <pre class="snip"><code><span class="c">// 4-byte little-endian trailer holds the bit count</span>
+num_bits = b0 | (b1 &lt;&lt; 8) | (b2 &lt;&lt; 16) | (b3 &lt;&lt; 24);
+<span class="c">// walk the tree, emit a symbol at each leaf</span>
+int bit = (byte &gt;&gt; bit_pos) &amp; 1;</code></pre>
+        <div class="stack"><span class="tag">C</span><span class="tag">binary file I/O</span><span class="tag">bit manipulation</span><span class="tag">binary trees</span></div>
+      </article>
+
+      <article class="sys">
+        <div class="sys-head">
+          <h3><span class="file">famtree.c</span> Family Tree Builder</h3>
+          <span class="when">Sep 2026</span>
+        </div>
+        <p>Reads a family description from standard input and builds a graph of people linked by father, mother and child edges. It then prints everyone in an order where parents always appear before their children.</p>
+        <ul>
+          <li>Stores people in a red-black tree keyed by name, so each person is created once and every edge is a pointer, not a copy.</li>
+          <li>Validates input as it goes, rejecting a person given two fathers or two mothers and a sex that contradicts an earlier line.</li>
+          <li>Runs a depth-first search with white, gray and black coloring. Reaching a gray node means the file describes a cycle, and finishing order gives a topological sort.</li>
+        </ul>
+        <pre class="snip"><code>if (child-&gt;color == GRAY) {
+    return 1;  <span class="c">// back edge: cycle</span>
+}
+p-&gt;color = BLACK;
+dll_prepend(order, new_jval_v(p));</code></pre>
+        <div class="stack"><span class="tag">C</span><span class="tag">graphs</span><span class="tag">DFS</span><span class="tag">topological sort</span><span class="tag">red-black trees</span></div>
+      </article>
+
+      <article class="sys">
+        <div class="sys-head">
+          <h3><span class="file">fakemake.c</span> Fakemake</h3>
+          <span class="when">Sep 2026</span>
+        </div>
+        <p>A scaled-down version of make that builds one executable with gcc. It reads a description file listing source files, headers, compiler flags, libraries and the executable name, and only rebuilds what is out of date.</p>
+        <ul>
+          <li>Uses <code>stat()</code> modification times to recompile a .c file only when its .o is missing, older than the source, or older than the newest header.</li>
+          <li>Relinks when anything was recompiled, or when the executable is missing or older than its newest object file. Otherwise it reports the target as up to date.</li>
+          <li>Builds each gcc command, runs it with <code>system()</code>, and stops on the first failed command.</li>
+        </ul>
+        <pre class="snip"><code>if (stat(ofile, &amp;osb) &lt; 0)            must_compile = 1;
+else if (csb.st_mtime &gt; osb.st_mtime) must_compile = 1;
+else if (hmax &gt; osb.st_mtime)         must_compile = 1;</code></pre>
+        <div class="stack"><span class="tag">C</span><span class="tag">POSIX</span><span class="tag">file timestamps</span><span class="tag">build systems</span><span class="tag">process execution</span></div>
+      </article>
+
+    </div>
+  </section>
+
+  <section id="algorithms">
+    <div class="path"><span>./</span>algorithms/*.cpp</div>
+    <h2>Algorithms in C++</h2>
+    <p class="sec-lede">Coursework from CS302 at UT Knoxville. Each program models a problem as a graph or data structure, then solves it with a classic algorithm written by hand.</p>
+    <div class="sys-list">
+
+      <article class="sys">
+        <div class="sys-head">
+          <h3><span class="file">city_map.cpp</span> City Map Fastest Route</h3>
+          <span class="when">Apr 2026</span>
+        </div>
+        <p>Builds a road network from a grid of intersections and uses Dijkstra's algorithm to find the fastest drive from one corner of the city to the other, counting both travel time and time spent waiting at traffic lights.</p>
+        <ul>
+          <li>Models one-way traffic: even and odd streets and avenues run in opposite directions, while every fifth one (and the last avenue) runs both ways.</li>
+          <li>Converts each segment's length to seconds at 30 mph and adds the light wait for best, worst or average case. The average uses the expected wait R² / 2(G + R).</li>
+          <li>Keeps a pointer from each node into the priority queue, so a node whose time improves is updated in place, then rebuilds the route from back edges.</li>
+        </ul>
+        <pre class="snip"><code><span class="c">// expected wait at a light: red R, green G</span>
+wait = (R * R) / (2.0 * (G + R));
+double new_time = cur_time + travel + wait;</code></pre>
+        <div class="stack"><span class="tag">C++</span><span class="tag">Dijkstra</span><span class="tag">priority queue</span><span class="tag">weighted graphs</span></div>
+      </article>
+
+      <article class="sys">
+        <div class="sys-head">
+          <h3><span class="file">worddice.cpp</span> Word Dice</h3>
+          <span class="when">Apr 2025</span>
+        </div>
+        <p>Decides whether a set of letter dice can spell each word in a list, using one die per letter, and prints which die goes with each letter. It solves this as a maximum-flow problem.</p>
+        <ul>
+          <li>Builds a flow network for each word: source to each die, each die to every letter it can show, each letter to the sink, all with capacity 1.</li>
+          <li>Runs Edmonds-Karp, using BFS to find augmenting paths through a residual graph with paired reverse edges.</li>
+          <li>The word can be spelled only if the max flow equals its length. The die for each letter is read back from the edges carrying flow.</li>
+        </ul>
+        <pre class="snip"><code>int flow = maxflow(src, sink);
+if (flow != wlen) {
+    cout &lt;&lt; "Cannot spell " &lt;&lt; word &lt;&lt; endl;
+}</code></pre>
+        <div class="stack"><span class="tag">C++</span><span class="tag">network flow</span><span class="tag">Edmonds-Karp</span><span class="tag">BFS</span><span class="tag">bipartite matching</span></div>
+      </article>
+
+      <article class="sys">
+        <div class="sys-head">
+          <h3><span class="file">maze_solve.cpp</span> Maze Solver</h3>
+          <span class="when">Apr 2026</span>
+        </div>
+        <p>Reads a maze given as rows, columns and a list of walls, turns the open cells into a graph, and finds a path from the first cell to the last.</p>
+        <ul>
+          <li>Stores walls in a set in both directions for fast lookups, and only checks right and down neighbors so each edge is added once.</li>
+          <li>Solves the maze with recursive depth-first search that backtracks out of dead ends, then prints the path cell by cell.</li>
+        </ul>
+        <pre class="snip"><code><span class="c">// dead end: remove this cell and back up</span>
+path.pop_back();
+return false;</code></pre>
+        <div class="stack"><span class="tag">C++</span><span class="tag">DFS</span><span class="tag">backtracking</span><span class="tag">graphs</span></div>
+      </article>
+
+      <article class="sys">
+        <div class="sys-head">
+          <h3><span class="file">quick_2_sort.cpp</span> Median-of-Three Quicksort</h3>
+          <span class="when">Mar 2026</span>
+        </div>
+        <p>An in-place quicksort on a vector of doubles that picks its pivot as the median of the first, middle and last elements, which avoids the worst case on already-sorted input.</p>
+        <ul>
+          <li>Partitions with two pointers moving inward from each end, then swaps the pivot into its final spot and recurses on both sides.</li>
+          <li>Handles size-1 and size-2 subarrays directly, and can print each step (start, median, partition) to trace the sort.</li>
+        </ul>
+        <pre class="snip"><code>while (left &lt;= right &amp;&amp; v[left]  &lt; pivot) left++;
+while (left &lt;= right &amp;&amp; v[right] &gt; pivot) right--;</code></pre>
+        <div class="stack"><span class="tag">C++</span><span class="tag">quicksort</span><span class="tag">recursion</span><span class="tag">in-place partitioning</span></div>
+      </article>
+
+      <article class="sys">
+        <div class="sys-head">
+          <h3><span class="file">sb-analyze.cpp</span> Superball Analyzer</h3>
+          <span class="when">Mar 2026</span>
+        </div>
+        <p>Analyzes a board from the game Superball and lists every group of same-colored cells that can be scored right now.</p>
+        <ul>
+          <li>Unions each cell with matching right and bottom neighbors in a disjoint set, so every connected color group shares one root.</li>
+          <li>Maps each group's root to a goal cell it touches, then reports groups at or above the minimum score size with their size, color and scoring cell.</li>
+        </ul>
+        <pre class="snip"><code>if (d-&gt;Find(curr) != d-&gt;Find(rightCell)) {
+    d-&gt;Union(d-&gt;Find(curr), d-&gt;Find(rightCell));
+}</code></pre>
+        <div class="stack"><span class="tag">C++</span><span class="tag">disjoint sets</span><span class="tag">union-find</span><span class="tag">game boards</span></div>
+      </article>
+
+    </div>
+  </section>
+
+  <section id="skills">
+    <div class="path"><span>./</span>skills.json</div>
+    <h2>Toolbox</h2>
+    <div class="code" role="list">
+      <div class="p">{</div>
+      <div class="row" role="listitem">&nbsp;&nbsp;<span class="k">"languages"</span><span class="p">: [</span><span class="vals s">"Python", "R", "SQL", "JavaScript", "TypeScript", "HTML", "CSS", "C++", "Java", "C#"</span><span class="p">],</span></div>
+      <div class="row" role="listitem">&nbsp;&nbsp;<span class="k">"data_ml"</span><span class="p">: [</span><span class="vals s">"Pandas", "NumPy", "SciPy", "ETL Pipelines", "scikit-learn", "XGBoost", "LightGBM", "Random Forest", "PyTorch", "TensorFlow", "SHAP", "FAISS", "PCA"</span><span class="p">],</span></div>
+      <div class="row" role="listitem">&nbsp;&nbsp;<span class="k">"ai_agents"</span><span class="p">: [</span><span class="vals s">"LangGraph", "Claude API", "Gemini API", "Pydantic", "ReAct", "RAG Pipelines", "Tool-Use Agents"</span><span class="p">],</span></div>
+      <div class="row" role="listitem">&nbsp;&nbsp;<span class="k">"databases"</span><span class="p">: [</span><span class="vals s">"PostgreSQL", "MongoDB", "Redis"</span><span class="p">],</span></div>
+      <div class="row" role="listitem">&nbsp;&nbsp;<span class="k">"cloud_devops"</span><span class="p">: [</span><span class="vals s">"AWS", "GCP", "Docker", "Kubernetes", "GitHub Actions", "Linux", "Windows", "Networking", "Git"</span><span class="p">],</span></div>
+      <div class="row" role="listitem">&nbsp;&nbsp;<span class="k">"frameworks"</span><span class="p">: [</span><span class="vals s">"React", "Next.js", "FastAPI", "Node.js", "REST APIs"</span><span class="p">]</span></div>
+      <div class="p">}</div>
+    </div>
+  </section>
+
+  <section id="education">
+    <div class="path"><span>./</span>education.md</div>
+    <h2>Education</h2>
+    <div class="edu">
+      <h3>University of Tennessee, Knoxville</h3>
+      <span class="when">Aug 2024 – May 2028</span>
+      <p>B.S. Computer Science, Machine Learning Concentration</p>
+    </div>
+    <div class="course-label">Relevant coursework</div>
+    <div class="courses">
+      <span>Data Structures &amp; Algorithms</span><span>Object-Oriented Programming</span><span>Linear Algebra</span>
+      <span>Machine Learning</span><span>Discrete Mathematics</span><span>Advanced Algorithm Analysis</span>
+      <span>Operating Systems Programming</span><span>Probability &amp; Statistics</span>
+    </div>
+    <div class="ta">
+      <span><b>Undergraduate Teaching Assistant</b> · CS101, CS102, EF151, EF152</span>
+      <span class="when">Apr 2025 – Present</span>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="path"><span>./</span>contact.sh</div>
+    <h2>Let's talk</h2>
+    <div class="contact">
+      <p>Open to software engineering and machine learning internships. The fastest way to reach me is email.</p>
+      <div class="contact-row">
+        <button class="chip" id="copy-email" type="button">shrish.36.sharma@gmail.com <span id="copy-label" style="color:var(--accent)">copy</span></button>
+        <a class="chip" href="https://linkedin.com/in/shrish-sharmaa" target="_blank" rel="noopener">linkedin.com/in/shrish-sharmaa ↗</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>built with plain HTML, CSS and JS · exit 0</footer>
+
+<script>
+(function () {
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // Scroll reveal: only hide things that start below the fold, so the first frame is complete.
+  var targets = document.querySelectorAll("section h2, section .path, .job, .proj, .sys, .code, .edu, .courses, .ta, .contact");
+  if (!reduce && "IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
+    targets.forEach(function (el) {
+      if (el.getBoundingClientRect().top > window.innerHeight) {
+        el.classList.add("reveal");
+        io.observe(el);
+      }
+    });
+    document.querySelectorAll(".projects .proj").forEach(function (el, i) { el.style.setProperty("--d", (i * 0.12) + "s"); });
+  }
+
+  // Progress bar, timeline fill, active nav link.
+  var bar = document.getElementById("progress");
+  var tl = document.getElementById("timeline");
+  var fill = document.getElementById("tl-fill");
+  var links = document.querySelectorAll(".nav-links a");
+  var sections = Array.prototype.map.call(links, function (a) { return document.querySelector(a.getAttribute("href")); });
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    bar.style.transform = "scaleX(" + (max > 0 ? h.scrollTop / max : 0) + ")";
+    var r = tl.getBoundingClientRect();
+    var mid = window.innerHeight * 0.6;
+    var p = Math.min(Math.max((mid - r.top) / r.height, 0), 1);
+    fill.style.height = (p * (r.height - 16)) + "px";
+    var current = -1;
+    sections.forEach(function (s, i) { if (s && s.getBoundingClientRect().top < 120) current = i; });
+    links.forEach(function (a, i) { a.classList.toggle("on", i === current); });
+  }
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", onScroll);
+  onScroll();
+
+  // Terminal prompt cycles through a few commands.
+  var typed = document.getElementById("typed");
+  var cmds = ["whoami", "cat resume.pdf", "ls projects/", "git log --oneline"];
+  if (!reduce) {
+    var ci = 0;
+    setInterval(function () {
+      ci = (ci + 1) % cmds.length;
+      var target = cmds[ci], n = 0;
+      typed.textContent = "";
+      var t = setInterval(function () {
+        n++; typed.textContent = target.slice(0, n);
+        if (n >= target.length) clearInterval(t);
+      }, 55);
+    }, 3200);
+  }
+
+  // Copy email.
+  var btn = document.getElementById("copy-email");
+  var label = document.getElementById("copy-label");
+  btn.addEventListener("click", function () {
+    var email = "shrish.36.sharma@gmail.com";
+    function done(msg) { label.textContent = msg; setTimeout(function () { label.textContent = "copy"; }, 1600); }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(email).then(function () { done("copied"); }, function () { done("select to copy"); });
+    } else { done("select to copy"); }
+  });
+})();
+</script>
+</body>
+</html>
